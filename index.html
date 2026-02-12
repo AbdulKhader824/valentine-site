@@ -56,11 +56,6 @@ button {
   animation: fadeIn 1.5s ease-in-out;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.8); }
-  to { opacity: 1; transform: scale(1); }
-}
-
 /* Floating hearts */
 .heart {
   position: absolute;
@@ -78,6 +73,32 @@ button {
     opacity: 0;
   }
 }
+
+/* Photo Bubbles */
+.photoBubble {
+  position: absolute;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  animation: floatBubble 7s linear infinite;
+  box-shadow: 0 0 15px rgba(255,255,255,0.7);
+}
+
+@keyframes floatBubble {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-800px);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
 </style>
 </head>
 
@@ -89,8 +110,8 @@ button {
   <button id="noBtn">No 😏</button>
 
   <div id="loveMessage">
-    😍 I knew it!!!  
-    You are officially stuck with me forever aachi kutty😎❤️  
+    😍 I knew it!!!<br>
+    You are officially stuck with me forever aachi kutty 😎❤️<br>
     Happy Valentine's Day 💕
   </div>
 </div>
@@ -100,11 +121,10 @@ const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
 const message = document.getElementById("loveMessage");
 
-// Move No button randomly (mobile safe)
+/* Move No button randomly */
 function moveButton() {
   const maxX = window.innerWidth - 100;
   const maxY = window.innerHeight - 60;
-
   noBtn.style.left = Math.random() * maxX + "px";
   noBtn.style.top = Math.random() * maxY + "px";
 }
@@ -112,13 +132,14 @@ function moveButton() {
 noBtn.addEventListener("mouseover", moveButton);
 noBtn.addEventListener("click", moveButton);
 
-// Yes button action
+/* YES Button */
 yesBtn.addEventListener("click", () => {
   message.style.display = "block";
   createHearts();
+  createPhotoBubbles();
 });
 
-// Floating hearts effect
+/* Hearts */
 function createHearts() {
   for (let i = 0; i < 30; i++) {
     const heart = document.createElement("div");
@@ -130,13 +151,41 @@ function createHearts() {
     heart.style.animationDuration = Math.random() * 3 + 2 + "s";
     document.body.appendChild(heart);
 
-    setTimeout(() => {
-      heart.remove();
-    }, 4000);
+    setTimeout(() => heart.remove(), 4000);
   }
 }
+
+/* AUTO PHOTO LOOP */
+function createPhotoBubbles() {
+
+  const totalPhotos = 12; // 👈 change this to how many photos you have
+
+  for (let i = 0; i < 50; i++) {
+
+    const bubble = document.createElement("div");
+    bubble.classList.add("photoBubble");
+
+    const randomNumber = Math.floor(Math.random() * totalPhotos) + 1;
+
+    // For names like: photo (1).jpeg
+    bubble.style.backgroundImage = `url("photo (${randomNumber}).jpeg")`;
+
+    bubble.style.left = Math.random() * window.innerWidth + "px";
+    bubble.style.bottom = "0px";
+
+    const size = Math.random() * 50 + 60;
+    bubble.style.width = size + "px";
+    bubble.style.height = size + "px";
+
+    bubble.style.animationDuration = Math.random() * 4 + 4 + "s";
+
+    document.body.appendChild(bubble);
+
+    setTimeout(() => bubble.remove(), 7000);
+  }
+}
+
 </script>
 
 </body>
 </html>
-
